@@ -1,6 +1,6 @@
 # OATS Traceability Backend Service
 
-A comprehensive Node.js backend service for the OATS (Organic Agricultural Traceability System) built with Express.js and Hyperledger Fabric SDK.
+A comprehensive Node.js backend service for the OATS (Organic Agricultural Traceability System) built with Express.js and Hyperledger Fabric CLI.
 
 ## Features
 
@@ -19,16 +19,7 @@ A comprehensive Node.js backend service for the OATS (Organic Agricultural Trace
 npm install
 ```
 
-2. Set up Fabric wallet and enroll user:
-```bash
-# Run from the oats-network directory
-cd ../
-# Enroll admin and register user (if not already done)
-./organizations/fabric-ca/registerEnroll.sh
-cd backend
-```
-
-3. Start the server:
+2. Start the server:
 ```bash
 npm start
 ```
@@ -81,18 +72,10 @@ npm run dev
 Create a `.env` file with the following variables:
 
 ```env
-FABRIC_NETWORK_NAME=oatschannel
-FABRIC_CONTRACT_NAME=oats-traceability
-ORG_NAME=TRST01
-ORG_MSP=TRST01MSP
-PEER_NAME=peer0.trst01.example.com
-PEER_HOST=localhost:7061
-ORDERER_NAME=orderer1.example.com
-ORDERER_HOST=localhost:7060
-CRYPTO_PATH=../organizations/peerOrganizations/trst01.example.com
-CERT_PATH=../organizations/peerOrganizations/trst01.example.com/users/Admin@trst01.example.com/msp
-TLS_CERT_PATH=../organizations/peerOrganizations/trst01.example.com/peers/peer0.trst01.example.com/tls/ca.crt
-CONNECTION_PROFILE_PATH=../organizations/peerOrganizations/trst01.example.com/connection-trst01.json
+CHANNEL_NAME=oatschannel
+CC_NAME=oats-traceability
+ORDERER_ADDRESS=localhost:7060
+ORDERER_TLS_HOST=orderer1.example.com
 PORT=3000
 NODE_ENV=development
 ```
@@ -125,6 +108,10 @@ Error responses:
   "error": "Detailed error message"
 }
 ```
+
+## Architecture
+
+This backend uses the Hyperledger Fabric CLI directly instead of the SDK, making it simpler and more reliable. It executes `peer` commands using Node.js `execFile` and parses the JSON responses.
 
 ## License
 
