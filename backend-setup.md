@@ -1,118 +1,72 @@
 # OATS Traceability Backend Service
 
-A comprehensive Node.js backend service for the OATS (Organic Agricultural Traceability System) built with Express.js and Hyperledger Fabric CLI.
+This backend service provides REST APIs for interacting with the OATS Traceability Hyperledger Fabric chaincode.
 
-## Features
-
-- **Actor Management**: Create and manage farmers, processors, exporters
-- **Asset Management**: Declare and track agricultural products
-- **Facility Management**: Manage processing facilities
-- **Traceability Events**: Track all supply chain events
-- **Transformations**: Track processing stages
-- **Compliance Documents**: Manage certificates and audits
-- **Advanced Queries**: Asset lineage, history, compliance reports
-
-## Installation
+## Setup
 
 1. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Start the server:
+2. Configure environment variables in `.env`:
+```
+CHANNEL_NAME=oatschannel
+CC_NAME=oats-traceability-javascript
+ORDERER_ADDRESS=localhost:7050
+CORE_PEER_LOCALMSPID=TRST01MSP
+CORE_PEER_ADDRESS=localhost:7051
+PORT=3000
+```
+
+3. Start the server:
 ```bash
 npm start
 ```
 
-For development with auto-reload:
-```bash
-npm run dev
-```
+The server will start on `http://localhost:3000`
 
 ## API Endpoints
 
-### Actors
-- `POST /api/actors/create` - Create a new actor
-- `GET /api/actors/:actorId` - Get actor details
-- `PUT /api/actors/:actorId/status` - Update actor status
+### Health Check
+- `GET /health` - Health check
 
-### Assets
-- `POST /api/assets/declare` - Declare a new asset
-- `GET /api/assets/:assetId` - Get asset details
-- `PUT /api/assets/:assetId/quantity` - Update asset quantity
-- `GET /api/assets/:assetId/history` - Get asset history
-- `GET /api/assets/:assetId/lineage` - Get asset lineage
-- `GET /api/assets/actor/:actorId` - Query assets by actor
-- `GET /api/assets/commodity/:commodityCode` - Query assets by commodity
+### Actor Management
+- `POST /actors/create` - Create a new actor
+- `GET /actors/:actorId` - Get actor details
+- `PUT /actors/:actorId/status` - Update actor status
 
-### Facilities
-- `POST /api/facilities/create` - Create a new facility
-- `GET /api/facilities/:facilityId` - Get facility details
+### Asset Management
+- `POST /assets/declare` - Declare a new asset
+- `GET /assets/:assetId` - Get asset details
+- `PUT /assets/:assetId/quantity` - Update asset quantity
 
-### Events
-- `POST /api/events/create` - Create a traceability event
-- `GET /api/events/:eventId` - Get event details
-- `GET /api/events/asset/:assetId` - Query events by asset
-- `GET /api/events/type/:eventType` - Query events by type
+### Facility Management
+- `POST /facilities/create` - Create a new facility
+- `GET /facilities/:facilityId` - Get facility details
+
+### Traceability Events
+- `POST /events/create` - Create a traceability event
+- `GET /events/:eventId` - Get event details
 
 ### Transformations
-- `POST /api/transformations/create` - Create a transformation
-- `GET /api/transformations/:processId` - Get transformation details
+- `POST /transformations/create` - Create a transformation
+- `GET /transformations/:processId` - Get transformation details
 
-### Documents
-- `POST /api/documents/create` - Create a compliance document
-- `GET /api/documents/:documentId` - Get document details
+### Compliance Documents
+- `POST /documents/create` - Create a compliance document
+- `GET /documents/:documentId` - Get document details
 
-### Reports
-- `GET /api/reports/traceability/:assetId` - Get full traceability report
-- `GET /api/reports/compliance/:assetId` - Get compliance status
+### Query Functions
+- `GET /query/asset/:assetId/history` - Get asset history
+- `GET /query/asset/:assetId/lineage` - Get asset lineage
+- `GET /query/assets/actor/:actorId` - Query assets by actor
+- `GET /query/events/asset/:assetId` - Query events by asset
+- `GET /query/events/type/:eventType` - Query events by type
+- `GET /query/assets/commodity/:commodityCode` - Query assets by commodity
 
-## Environment Variables
+### Compliance and Audit
+- `GET /compliance/report/:assetId` - Get full traceability report
+- `GET /compliance/status/:assetId` - Get compliance status
 
-Create a `.env` file with the following variables:
-
-```env
-CHANNEL_NAME=oatschannel
-CC_NAME=oats-traceability
-ORDERER_ADDRESS=localhost:7060
-ORDERER_TLS_HOST=orderer1.example.com
-PORT=3000
-NODE_ENV=development
-```
-
-## API Documentation
-
-Visit `http://localhost:3000/api` for complete API documentation.
-
-## Health Check
-
-Visit `http://localhost:3000/health` to check service status.
-
-## Error Handling
-
-All endpoints return consistent JSON responses:
-
-```json
-{
-  "success": true,
-  "message": "Operation successful",
-  "data": { ... }
-}
-```
-
-Error responses:
-```json
-{
-  "success": false,
-  "message": "Error description",
-  "error": "Detailed error message"
-}
-```
-
-## Architecture
-
-This backend uses the Hyperledger Fabric CLI directly instead of the SDK, making it simpler and more reliable. It executes `peer` commands using Node.js `execFile` and parses the JSON responses.
-
-## License
-
-Apache-2.0
+See `curl-examples.md` for detailed curl commands to test all APIs.
